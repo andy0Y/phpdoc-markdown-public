@@ -2,8 +2,6 @@
 
 namespace Cvuorinen\PhpdocMarkdownPublic\Extension;
 
-use phpDocumentor\Descriptor\ClassDescriptor;
-use phpDocumentor\Descriptor\MethodDescriptor;
 use Twig_Extension;
 use Twig_SimpleFunction;
 
@@ -17,7 +15,6 @@ use Twig_SimpleFunction;
 class TwigClassPublicMethods extends Twig_Extension
 {
     const NAME = 'TwigClassPublicMethods';
-
     /**
      * {@inheritdoc}
      */
@@ -43,7 +40,7 @@ class TwigClassPublicMethods extends Twig_Extension
      */
     public function getPublicMethods($class)
     {
-        if (!$class instanceof ClassDescriptor) {
+        if (!(is_a($class, 'phpDocumentor\Descriptor\ClassDescriptor') || is_subclass_of($class, 'phpDocumentor\Descriptor\ClassDescriptor'))) {
             return [];
         }
 
@@ -53,7 +50,7 @@ class TwigClassPublicMethods extends Twig_Extension
 
         return array_filter(
             $methods->getAll(),
-            function (MethodDescriptor $method) {
+            function ($method) {
                 return $method->getVisibility() === 'public';
             }
         );
